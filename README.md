@@ -1,0 +1,2 @@
+# GrayScott-OpenCl
+# GrayScott-OpenCl
