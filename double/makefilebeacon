@@ -1,0 +1,42 @@
+####### Compiler, tools and options
+
+CC            = icc
+CFLAGS        = -O2 
+DEL_FILE      = rm -f
+
+INC = -I/global/opt/intel/opencl-1.2-3.0.67279/include/CL/ \
+        -I../../clFFT/src/package/include
+
+LIBS = -Wl,-rpath,/global/opt/intel/opencl-1.2-3.0.67279/lib64 -lOpenCL \
+        -L../../clFFT/src/package/lib64 -lclFFT -lm
+ 
+#
+
+####### Build rules 
+
+CL: grayscottOpenCLs.c
+	$(DEL_FILE) grayscottOpenCLs
+	$(DEL_FILE) *.o
+	$(CC) $(CFLAGS) $(INC) -o grayscottOpenCLs grayscottOpenCLs.c $(LIBS)
+
+CL43: grayscottOpenCL43.c
+	$(DEL_FILE) grayscottOpenCL
+	$(DEL_FILE) *.o
+	$(CC) $(CFLAGS) $(INC) -o grayscottOpenCL43 grayscottOpenCL43.c $(LIBS)
+
+info: infocl.c
+	$(CC) $(CFLAGS) $(INC) -o infocl infocl.c $(LIBS)
+
+out: xdmfcreate.f90
+	gfortran -o out xdmfcreate.f90
+
+outa: xdmfcreatea.f90
+	gfortran -o outa xdmfcreatea.f90
+clean: 
+	$(DEL_FILE) grayscottOpenCL43
+	$(DEL_FILE) grayscottOpenCLs
+	$(DEL_FILE) infocl
+	$(DEL_FILE) out
+	$(DEL_FILE) outa
+	$(DEL_FILE) *.xmf
+	$(DEL_FILE) *.o

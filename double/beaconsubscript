@@ -1,0 +1,12 @@
+#!/bin/bash
+#PBS -A UT-BEACON-MUITE 
+#PBS -l nodes=1,walltime=00:10:00
+#PBS -o output.out
+#PBS -e output.err
+
+cd $PBS_O_WORKDIR
+export LD_LIBRARY_PATH=/nics/c/home/bmuite/GrayScottQuell/grayscott/clFFT/build/library:$LD_LIBRARY_PATH
+echo $LD_LIBRARY_PATH
+
+
+./grayscottOpenCLs

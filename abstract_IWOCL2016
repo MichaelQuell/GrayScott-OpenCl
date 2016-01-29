@@ -1,0 +1,6 @@
+Title: Runtime comparison solving two dimensional Gray-Soctt equation on different devices that support OpenCl
+
+Abstract: The Gray-Scott equation is an example of a reaction-diffusion equation with chaotic solutions. You can expect patterns to emerge from chaos. A uniformly discretization in space and periodic boundary conditions allows the Fast Fourier Transform to be used, so that when coupled with a suitable time stepping scheme a numerical method that suits the parallelism of OpenCL is obtained. The code was benchmarked on various CPU and GPU devices. Performance results for various problem sizes are shown. Example programs can be found at:
+https://github.com/MichaelQuell/GrayScott-OpenCl
+
+Keywords: Gray-Scott; Fast Fourier Transforms; Benchmarks; Partial Differential Equations
