@@ -86,6 +86,9 @@ int main(argc,argv)
 //Which platform and device do i choose?
 	int	chooseplatform=0;
 	int	choosedevice=0;	  
+	if(myid ==1){
+		choosedevice=1;
+	}
 	printf("Proc %d choose platform %d and device %d!\n",myid,chooseplatform,choosedevice);
 	context = clCreateContext( NULL, num_devices[chooseplatform], device_id[chooseplatform], NULL, NULL, &ret);
 	if(ret!=CL_SUCCESS){printf("createContext ret:%d,%d\n",ret,myid); exit(1); }
@@ -173,34 +176,12 @@ int main(argc,argv)
  	if(myid==0){printf("starting timestepping!\n");}
   	gettimeofday(&tvs, NULL); 
 	for(n=0;n<=Tmax;n++){
-//linear
-fft2dfor(&cl_u, &cl_uhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2, &context, &command_queue, &tmpBufferX, &tmpBufferY, &cl_T1,&cl_T2, T1, T2, Nx, Ny, xdiff, ydiff);
-fft2dfor(&cl_v, &cl_vhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2, &context, &command_queue, &tmpBufferX, &tmpBufferY, &cl_T1,&cl_T2, T1, T2, Nx, Ny, xdiff, ydiff);
-
-    ret = clSetKernelArg(linearpart, 0, sizeof(cl_mem),(void *)&cl_uhat);
-    ret = clSetKernelArg(linearpart, 1, sizeof(cl_mem),(void *)&cl_vhat);
-	ret = clSetKernelArg(linearpart, 2, sizeof(cl_mem),(void* )&cl_kx);
-	ret = clSetKernelArg(linearpart, 3, sizeof(cl_mem),(void* )&cl_ky);
-	ret = clSetKernelArg(linearpart, 4, sizeof(double),(void* )&dt);
-	ret = clSetKernelArg(linearpart, 5, sizeof(double),(void* )&Du);
-	ret = clSetKernelArg(linearpart, 6, sizeof(double),(void* )&Dv);
-	ret = clSetKernelArg(linearpart, 7, sizeof(double),(void* )&A);
-	ret = clSetKernelArg(linearpart, 8, sizeof(double),(void* )&B);
-	ret = clSetKernelArg(linearpart, 9, sizeof(double),(void* )&b);
-	ret = clSetKernelArg(linearpart, 10, sizeof(int),(void* )&Nx);
-	ret = clSetKernelArg(linearpart, 11, sizeof(int),(void* )&Ny);
-	ret = clSetKernelArg(linearpart, 12, sizeof(int),(void* )&myid);
-    ret = clEnqueueNDRangeKernel(command_queue, linearpart, 1, NULL, global_work_size, NULL, 0, NULL, NULL);
-	ret = clFinish(command_queue);
-
-fft2dback(&cl_u, &cl_uhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2, &context, &command_queue, &tmpBufferX, &tmpBufferY, &cl_T1,&cl_T2, T1, T2, Nx, Ny, xdiff, ydiff);
-fft2dback(&cl_v, &cl_vhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2, &context, &command_queue, &tmpBufferX, &tmpBufferY, &cl_T1,&cl_T2, T1, T2, Nx, Ny, xdiff, ydiff);
 //nonlinearpart
 
     ret = clSetKernelArg(nonlinearpart, 0, sizeof(cl_mem),(void *)&cl_u);
 	ret = clSetKernelArg(nonlinearpart, 1, sizeof(cl_mem),(void* )&cl_v);
 	ret = clSetKernelArg(nonlinearpart, 2, sizeof(double),(void* )&dt);
-	ret = clSetKernelArg(nonlinearpart, 3, sizeof(double),(void* )&a);
+	ret = clSetKernelArg(nonlinearpart, 3, sizeof(double),(void* )&b);
     ret = clEnqueueNDRangeKernel(command_queue, nonlinearpart, 1, NULL, global_work_size, NULL, 0, NULL, NULL);
 	ret = clFinish(command_queue);	
 
@@ -217,7 +198,7 @@ fft2dfor(&cl_v, &cl_vhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2
 	ret = clSetKernelArg(linearpart, 6, sizeof(double),(void* )&Dv);
 	ret = clSetKernelArg(linearpart, 7, sizeof(double),(void* )&A);
 	ret = clSetKernelArg(linearpart, 8, sizeof(double),(void* )&B);
-	ret = clSetKernelArg(linearpart, 9, sizeof(double),(void* )&b);
+	ret = clSetKernelArg(linearpart, 9, sizeof(double),(void* )&a);
 	ret = clSetKernelArg(linearpart, 10, sizeof(int),(void* )&Nx);
 	ret = clSetKernelArg(linearpart, 11, sizeof(int),(void* )&Ny);
 	ret = clSetKernelArg(linearpart, 12, sizeof(int),(void* )&myid);
@@ -226,14 +207,22 @@ fft2dfor(&cl_v, &cl_vhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2
 
 fft2dback(&cl_u, &cl_uhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2, &context, &command_queue, &tmpBufferX, &tmpBufferY, &cl_T1,&cl_T2, T1, T2, Nx, Ny, xdiff, ydiff);
 fft2dback(&cl_v, &cl_vhat, &planHandleX, &planHandleY, &transposeF1, &transposeF2, &context, &command_queue, &tmpBufferX, &tmpBufferY, &cl_T1,&cl_T2, T1, T2, Nx, Ny, xdiff, ydiff);
+//nonlinearpart
 
+    ret = clSetKernelArg(nonlinearpart, 0, sizeof(cl_mem),(void *)&cl_u);
+	ret = clSetKernelArg(nonlinearpart, 1, sizeof(cl_mem),(void* )&cl_v);
+	ret = clSetKernelArg(nonlinearpart, 2, sizeof(double),(void* )&dt);
+	ret = clSetKernelArg(nonlinearpart, 3, sizeof(double),(void* )&b);
+    ret = clEnqueueNDRangeKernel(command_queue, nonlinearpart, 1, NULL, global_work_size, NULL, 0, NULL, NULL);
+	ret = clFinish(command_queue);	
+	
 // done
 	if(n==plottime){
 		if(myid==0){printf("time:%lf, step:%d,%d\n",n*dt,n,plotnum);}
 		plottime=plottime+plotgap;
 		plotnum++;
 
-        //writedata(&cl_u, &cl_v, &command_queue,T1,T2,Nx,ydiff,plotnum);
+        writedata(&cl_u, &cl_v, &command_queue,T1,T2,Nx,ydiff,plotnum);
         writeimage(&cl_v, &command_queue,T1,Nx,ydiff,plotnum);
 	}
 }

@@ -53,7 +53,7 @@ int main(void) {
     cl_uint ret_num_platforms;
     cl_int ret;
 	ret = clGetPlatformIDs(1, &platform_id, &ret_num_platforms);
-    	ret = clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_DEFAULT, 1, &device_id, &ret_num_devices);
+    	ret = clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_CPU, 1, &device_id, &ret_num_devices);
 	context = clCreateContext( NULL, 1, &device_id, NULL, NULL, &ret);
 	command_queue = clCreateCommandQueue(context, device_id, 0, &ret);
     	size_t source_size;
@@ -135,7 +135,7 @@ int status=0;
 			printf("Error with tmpBuffer clCreateBuffer\n");
 	}
 //kernel grid
-    	fp = fopen("./grid.c", "r");
+    	fp = fopen("./grid.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load grid.\n"); exit(1); }
     	source_str = (char *)malloc(MAX_SOURCE_SIZE);
    	source_size = fread( source_str, 1, MAX_SOURCE_SIZE, fp );
@@ -179,7 +179,7 @@ int status=0;
     	ret = clReleaseKernel(grid); ret = clReleaseProgram(p_grid);
 
 //kernel initial data
-    	fp = fopen("./initialdata.c", "r");
+    	fp = fopen("./initialdata.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load initialdata.\n"); exit(1); }
 	free(source_str);    	
 	source_str = (char *)malloc(MAX_SOURCE_SIZE);
@@ -251,7 +251,7 @@ int status=0;
 
 //frequencies kernel
 
-    	fp = fopen("./frequencies.c", "r");
+    	fp = fopen("./frequencies.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load frequencies.\n"); exit(1); }
 	free(source_str);
     	source_str = (char *)malloc(MAX_SOURCE_SIZE);
@@ -286,7 +286,7 @@ int status=0;
 	printf("Setup grid, fourier frequencies and initialcondition\n");
 //load the rest of the kernels
 //linearpart kernel
-    	fp = fopen("./linearpart.c", "r");
+    	fp = fopen("./linearpart.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load linearpart.\n"); exit(1); }
 	free(source_str);    	
 	source_str = (char *)malloc(MAX_SOURCE_SIZE);
@@ -298,7 +298,7 @@ int status=0;
         linearpart = clCreateKernel(p_linearpart, "linearpart", &ret);
 
 //kernel nonlinear
-    	fp = fopen("./nonlinearpart.c", "r");
+    	fp = fopen("./nonlinearpart.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load nonlinearpart.\n"); exit(1); }
 	free(source_str);    	
 	source_str = (char *)malloc(MAX_SOURCE_SIZE);
@@ -411,7 +411,7 @@ int status=0;
 	printf("Finished time stepping\n");
  	elapsedTime = (tve.tv_sec - tvs.tv_sec) * 1000.0;      // sec to ms
     	elapsedTime += (tve.tv_usec - tvs.tv_usec) / 1000.0;   // us to ms
-   	printf("Program took %fms for execution\n",elapsedTime);
+   	printf("%f,",elapsedTime);
 
 
 

@@ -1,11 +1,11 @@
 let old=8
 let new=16
-for i in {0..2}
+for i in {0..7}
 do
 let old+=$old
-echo $old
+#echo $old
 let new+=$new
-echo $new
+#echo $new
 sed -i "s/$old/$new/" ./INPUTFILE
 time ./grayscottOpenCLs
 done

@@ -17,7 +17,9 @@ const double voldre=vre[ind].x;
 
 double utempre,vtempre;
 double uMre,vMre;
-while(chg>tol){
+int cnt=0;
+while(chg>tol&&cnt<100){
+cnt=cnt+1;
 utempre=ure[ind].x;
 
 vtempre=vre[ind].x;

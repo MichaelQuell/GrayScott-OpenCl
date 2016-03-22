@@ -144,7 +144,7 @@ int status=0;
 			printf("Error with tmpBuffer clCreateBuffer\n");
 	}
 //kernel grid
-    	fp = fopen("./grid.c", "r");
+    	fp = fopen("./grid.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load grid.\n"); exit(1); }
     	source_str = (char *)malloc(MAX_SOURCE_SIZE);
    	source_size = fread( source_str, 1, MAX_SOURCE_SIZE, fp );
@@ -188,7 +188,7 @@ int status=0;
     	ret = clReleaseKernel(grid); ret = clReleaseProgram(p_grid);
 
 //kernel initial data
-    	fp = fopen("./initialdata.c", "r");
+    	fp = fopen("./initialdata.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load initialdata.\n"); exit(1); }
 	free(source_str);    	
 	source_str = (char *)malloc(MAX_SOURCE_SIZE);
@@ -260,7 +260,7 @@ int status=0;
 
 //frequencies kernel
 
-    	fp = fopen("./frequencies.c", "r");
+    	fp = fopen("./frequencies.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load frequencies.\n"); exit(1); }
 	free(source_str);
     	source_str = (char *)malloc(MAX_SOURCE_SIZE);
@@ -295,7 +295,7 @@ int status=0;
 	printf("Setup grid, fourier frequencies and initialcondition\n");
 //load the rest of the kernels
 //linearpart kernel
-    	fp = fopen("./linearpart.c", "r");
+    	fp = fopen("./linearpart.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load linearpart.\n"); exit(1); }
 	free(source_str);    	
 	source_str = (char *)malloc(MAX_SOURCE_SIZE);
@@ -307,7 +307,7 @@ int status=0;
         linearpart = clCreateKernel(p_linearpart, "linearpart", &ret);
 
 //kernel nonlinear
-    	fp = fopen("./nonlinearpart.c", "r");
+    	fp = fopen("./nonlinearpart.cl", "r");
     	if (!fp) {fprintf(stderr, "Failed to load nonlinearpart.\n"); exit(1); }
 	free(source_str);    	
 	source_str = (char *)malloc(MAX_SOURCE_SIZE);

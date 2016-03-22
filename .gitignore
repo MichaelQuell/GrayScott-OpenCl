@@ -1,1 +1,7 @@
 *~
+*.datbin
+*.dat
+*.bmp
+*.eps
+
+grayscottOpenCLs
