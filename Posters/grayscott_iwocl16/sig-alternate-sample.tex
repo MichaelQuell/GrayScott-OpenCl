@@ -51,32 +51,19 @@
 \begin{document}
 
 % Copyright
-\setcopyright{acmcopyright}
+%\setcopyright{acmcopyright}
 %\setcopyright{acmlicensed}
 %\setcopyright{rightsretained}
 %\setcopyright{usgov}
 %\setcopyright{usgovmixed}
 %\setcopyright{cagov}
 %\setcopyright{cagovmixed}
+\CopyrightYear{2016}
+\setcopyright{rightsretained}
+\conferenceinfo{IWOCL '16}{April 19-21, 2016, Vienna, Austria}
+\isbn{978-1-4503-4338-1/16/04}
+\doi{http://dx.doi.org/10.1145/2909437.2909461}
 
-
-% DOI
-\doi{10.475/123_4}
-
-% ISBN
-\isbn{123-4567-24-567/08/06}
-
-%Conference
-\conferenceinfo{PLDI '13}{June 16--19, 2013, Seattle, WA, USA}
-
-\acmPrice{\$15.00}
-
-%
-% --- Author Metadata here ---
-\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}
-%\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
-%\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
-% --- End of Author Metadata ---
 
 \title{Runtime comparison solving Gray-Scott equation on different OpenCL devices}
 %\subtitle{[Extended Abstract]
@@ -188,7 +175,7 @@ The Gray-Scott-equation\cite{grayscott} describes the reaction of 2 chemicals an
 The equation is solved on $[-4\pi,4\pi]^2$ with periodic boundary conditions.
 The parameters used in the simulations were $D_u=0.04$, $D_v=0.005$, $F=0.038$ and $k=0.076$. The initial data is a 2-dimensional Gaussian function in both components.
 
-\section{The {\secit Body} of The Paper}
+\section{Solving}
 The equation is solved using a splitting method, in this case we split the equation into the non linear 
 \begin{eqnarray*}
 \frac{\partial u}{\partial t}&=& -uv^2 ,\quad \frac{\partial v}{\partial t}=uv^2 \\
@@ -199,12 +186,12 @@ and the linear part
 \frac{\partial v}{\partial t}&=& D_v\Delta v-(F+k)v. \\
  \end{eqnarray*} 
  %\vspace{-5}
- The linear part can be solved exactly in Fourierspace and the non linear could be exactly solved using the Lambert $W$ function, but there is no implementation available for OpenCl, instead fix point iteration is used to solve the implicit midpoint rule. The two parts are combined with strang splitting. The space discretization is equidistant in both axes.
+ The linear part can be solved exactly in Fourierspace and the non linear could be exactly solved using the Lambert $W$ function, but there is no implementation available for OpenCl, instead fix point iteration is used to solve the implicit midpoint rule. The two parts are combined with Strang splitting\cite{splitting}. The space discretization is equidistant in both axes.
 
 \subsection{Implementation}
 \begin{enumerate}
 \item Initialize the data
-\item time stepping
+\item Time stepping
 \begin{enumerate}
 \item Call non linear kernel
 \item {\bf Compute FFT }\cite{clFFT}
@@ -225,7 +212,7 @@ The results show that the GPU's outperform the CPU's in single precision, but wh
 %\end{document}  % This is where a 'short' article might terminate
 
 %ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
+\section{Acknowledgements}
 I would like to thank Benson  {{K}}. Muite  for funding the hardware for the research.
 
 %
@@ -237,12 +224,13 @@ I would like to thank Benson  {{K}}. Muite  for funding the hardware for the res
   \setlength{\baselineskip}{1.0em}
   \bibitem{grayscott}
 P.~Gray, S.~Scott, Chemical Waves and Instabilities, Clarendon, Oxford, 1990.
-
+\bibitem{splitting}
+G. Strang, On the construction and comparison of difference schemes,
+SIAM J. Numer.Anal., 5:506-517, 1968.
 \bibitem{clFFT}
   clFFT open source library to compute FFT with OpenCl\\
   \url{https://github.com/clMathLibraries/clFFT}
   
-\bibitem{splitting} maybe cite something for splitting ???
 \end{thebibliography}
 %\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
 % You must have a proper ".bib" file

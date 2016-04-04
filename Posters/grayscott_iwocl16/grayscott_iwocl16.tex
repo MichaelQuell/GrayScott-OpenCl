@@ -97,7 +97,7 @@ and the linear part
 \frac{\partial v}{\partial t}&=& D_v\Delta v-(F+k)v. \\
  \end{eqnarray*} 
  %\vspace{-5}
- The linear part can be solved exactly in Fourierspace and the non linear could be exactly solved using the Lambert $W$ function, but there is no implementation available for OpenCl, instead fix point iteration is used to solve the implicit midpoint rule. The two parts are combined with strang splitting. The space discretization is equidistant in both axes.
+ The linear part can be solved exactly in Fourierspace and the non linear could be exactly solved using the Lambert $W$ function, but there is no implementation available for OpenCl, instead fix point iteration is used to solve the implicit midpoint rule. The two parts are combined with Strang splitting\cite{splitting}. The space discretization is equidistant in both axes.
 
 }
 
@@ -110,7 +110,7 @@ and the linear part
 
 \begin{enumerate}
 \item Initialize the data
-\item time stepping
+\item Time stepping
 \begin{enumerate}
 \item Call non linear kernel
 \item {\bf Compute FFT }\cite{clFFT}
@@ -139,12 +139,12 @@ The linear and non linear kernel operates on each grid point individually and ar
   \setlength{\baselineskip}{1.0em}
   \bibitem{grayscott}
 P.~Gray, S.~Scott, Chemical Waves and Instabilities, Clarendon, Oxford, 1990.
-
+\bibitem{splitting}
+G. Strang, On the construction and comparison of difference schemes,
+SIAM J. Numer.Anal., 5:506-517, 1968.
 \bibitem{clFFT}
   clFFT open source library to compute FFT with OpenCl\\
   \url{https://github.com/clMathLibraries/clFFT}
-\bibitem{splitting}
-maybe cite something for splitting ???
 \end{thebibliography}
 }
 
